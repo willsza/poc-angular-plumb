@@ -1,0 +1,41 @@
+<div class="container-fluid">
+	<div class="row">
+		
+		<div class="flow-nav col-md-2 bg-light p-5">
+			<ul>
+				<li>Itens</li>
+			</ul>
+
+			<button (click)="getConnections()">Get Connections</button>
+			<button (click)="addTable()">Create Element</button>
+		</div>
+		
+		<div class="workspace col-md-10 p-5" id="workspace" #workspace>
+
+			<div class="card" id="table_1">
+				<div class="card-body">
+					Table 1
+				</div>
+			</div>
+
+			<div class="card" id="table_2">
+				<div class="card-body">
+					Table 2
+				</div>
+			</div>
+
+			<div class="card" id="table_3">
+				<div class="card-body">
+					Table 3
+				</div>
+			</div>
+
+			<div class="card" id="table_4">
+				<div class="card-body">
+					Table 4
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

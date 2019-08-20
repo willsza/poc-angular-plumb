@@ -1,0 +1,14 @@
+
+.flow-nav {
+	border-right: 1px solid #ccc;
+	height: 100vh;
+}
+
+.workspace {
+	position: relative;
+}
+
+.card {
+	position: absolute;
+	border-radius: 0;
+}
