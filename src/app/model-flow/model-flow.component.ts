@@ -37,6 +37,7 @@ export class ModelFlowComponent implements AfterViewInit {
     this.renderer.appendChild(this.workspace.nativeElement, card);
 
     this.draggableElementsInit();
+    this.endPointsInit();
   }
 
   jsPlumbInit(): void {
@@ -79,10 +80,13 @@ export class ModelFlowComponent implements AfterViewInit {
       }
     };
 
-    const table1EP = this.jsPlumbInstance.addEndpoint('table_1', { uuid: '0001' }, endpointOptions );
-    const table2EP = this.jsPlumbInstance.addEndpoint('table_2', { uuid: '0002' }, endpointOptions );
-    const table3EP = this.jsPlumbInstance.addEndpoint('table_3', { uuid: '0003' }, endpointOptions );
-    const table4EP = this.jsPlumbInstance.addEndpoint('table_4', { uuid: '0004' }, endpointOptions );
+    // const table1EP = this.jsPlumbInstance.addEndpoint('table_1', { uuid: '0001' }, endpointOptions );
+    // const table2EP = this.jsPlumbInstance.addEndpoint('table_2', { uuid: '0002' }, endpointOptions );
+    // const table3EP = this.jsPlumbInstance.addEndpoint('table_3', { uuid: '0003' }, endpointOptions );
+    // const table4EP = this.jsPlumbInstance.addEndpoint('table_4', { uuid: '0004' }, endpointOptions );
+
+    const endPointElements = document.getElementsByClassName('card');
+    this.jsPlumbInstance.addEndpoint(endPointElements, endpointOptions );
 
     // this.jsPlumbInstance.connect({ uuids: [ '0001', '0004' ] });
 
