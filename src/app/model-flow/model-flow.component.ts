@@ -42,6 +42,31 @@ export class ModelFlowComponent implements AfterViewInit {
 
   jsPlumbInit(): void {
     this.jsPlumbInstance = jsPlumb.getInstance({
+      // default drag options
+      DragOptions: { cursor: 'pointer', zIndex: 2000 },
+      // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
+      // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
+      ConnectionOverlays: [
+          [ "Arrow", {
+              location: 1,
+              visible: true,
+              width: 11,
+              length: 11,
+              id: "ARROW",
+              events:{
+                  click:function() { alert("you clicked on the arrow overlay")}
+              }
+          } ],
+          [ "Label", {
+              location: 0.1,
+              id: "label",
+              cssClass: "aLabel",
+              events: {
+                  tap:function() { alert("hey"); }
+              }
+          }]
+      ],
+
       Container: 'workspace'
     });
 
@@ -69,15 +94,15 @@ export class ModelFlowComponent implements AfterViewInit {
     const endpointOptions = {
       isSource: true,
       isTarget: true,
-      endpoint: [ 'Dot', { radius: 5 } ],
-      connector : 'Flowchart',
-      anchor: 'Continuous',
-      maxConnections: -1,
-      dropOptions: {
-        drop(e, ui) {
-          alert('drop!');
-        }
-      }
+      // endpoint: [ 'Dot', { radius: 5 } ],
+      // connector : 'Flowchart',
+      // anchors: ["Bottom", "Continuous"],
+      // maxConnections: 32,
+      // dropOptions: {
+      //   drop(e, ui) {
+      //     alert('drop!');
+      //   }
+      // }
     };
 
     // const table1EP = this.jsPlumbInstance.addEndpoint('table_1', { uuid: '0001' }, endpointOptions );
@@ -86,7 +111,150 @@ export class ModelFlowComponent implements AfterViewInit {
     // const table4EP = this.jsPlumbInstance.addEndpoint('table_4', { uuid: '0004' }, endpointOptions );
 
     const endPointElements = document.getElementsByClassName('card');
-    this.jsPlumbInstance.addEndpoint(endPointElements, endpointOptions );
+    // this.jsPlumbInstance.addEndpoint(endPointElements, endpointOptions );
+
+
+    const connectorPaintStyle = {
+      strokeWidth: 1,
+      stroke: '#60789b',
+      joinstyle: 'round',
+      outlineStroke: '#f5f9fd',
+      outlineWidth: 2
+    };
+        // .. and this is the hover style.
+    const connectorHoverStyle = {
+      strokeWidth: 3,
+      stroke: "#216477",
+      outlineWidth: 5,
+      outlineStroke: "white"
+    };
+
+    const endpointHoverStyle = {
+        fill: "#216477",
+        stroke: "#216477"
+    };
+
+
+    const sourceEndpoint = {
+      endpoint: "Dot",
+      paintStyle: {
+          stroke: "transparent",
+          fill: "transparent",
+          radius: 5,
+          strokeWidth: 1
+      },
+      isSource: true,
+      connector: [ "Flowchart", { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
+      connectorStyle: connectorPaintStyle,
+      hoverPaintStyle: endpointHoverStyle,
+      connectorHoverStyle: connectorHoverStyle,
+      dragOptions: {},
+      overlays: [
+          [ "Label", {
+              location: [0.5, 1.5],
+              label: "Drag",
+              cssClass: "endpointSourceLabel",
+              visible:false
+          } ]
+      ]
+    };
+
+    const targetEndpoint = {
+      endpoint: "Dot",
+      paintStyle: { fill: "#7AB02C", radius: 5 },
+      hoverPaintStyle: endpointHoverStyle,
+      maxConnections: -1,
+      dropOptions: { hoverClass: "hover", activeClass: "active" },
+      isTarget: true,
+      overlays: [
+          [ "Label", { location: [0.5, -0.5], label: "Drop", cssClass: "endpointTargetLabel", visible:false } ]
+      ]
+    };
+
+    this.jsPlumbInstance.addEndpoint('table_1', sourceEndpoint, {
+      anchor: 'TopCenter', uuid: '0001'
+    });
+
+    this.jsPlumbInstance.addEndpoint('table_1', targetEndpoint, {
+      anchor: 'BottomCenter', uuid: '0002'
+    });
+
+    this.jsPlumbInstance.addEndpoint('table_1', targetEndpoint, {
+      anchor: 'BottomLeft', uuid: '0003'
+    });
+
+    this.jsPlumbInstance.addEndpoint('table_2', sourceEndpoint, {
+      anchor: 'TopCenter', uuid: '0004'
+    });
+
+    this.jsPlumbInstance.addEndpoint('table_2', targetEndpoint, {
+      anchor: 'BottomCenter', uuid: '0005'
+    });
+
+    this.jsPlumbInstance.addEndpoint('table_3', targetEndpoint, {
+      anchor: 'BottomCenter', uuid: '0006'
+    });
+
+    this.jsPlumbInstance.addEndpoint('table_3', sourceEndpoint, {
+      anchor: 'TopCenter', uuid: '0007'
+    });
+
+    this.jsPlumbInstance.addEndpoint('table_3', sourceEndpoint, {
+      anchor: 'TopLeft', uuid: '0008'
+    });
+
+    this.jsPlumbInstance.addEndpoint('table_3', sourceEndpoint, {
+      anchor: 'TopRight', uuid: '0009'
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0, 0, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0.2, 0, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0.4, 0, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0.6, 0, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0.8, 0, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 1, 0, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0, 0.2, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0, 0.4, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0, 0.6, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0, 0.8, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_4", sourceEndpoint, {
+      anchor: [ 0, 1, 0, 0 ]
+    });
+
+    this.jsPlumbInstance.addEndpoint("table_5", sourceEndpoint, {
+      endpoint: ['Rectangle', { width: '60px', height: '5px' } ],
+      anchor: 'TopCenter'
+    });
 
     // this.jsPlumbInstance.connect({ uuids: [ '0001', '0004' ] });
 
