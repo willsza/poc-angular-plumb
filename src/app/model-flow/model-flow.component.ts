@@ -26,14 +26,23 @@ export class ModelFlowComponent implements AfterViewInit {
 
   addTable(): void {
     const card = this.renderer.createElement('div');
+    const cardMore = this.renderer.createElement('div');
+    const cardImg = this.renderer.createElement('div');
     const cardBody = this.renderer.createElement('div');
-    const text = this.renderer.createText('Table');
+    const cardInput = this.renderer.createElement('input');
 
     this.renderer.addClass(card, 'card');
+    this.renderer.addClass(cardMore, 'card-more');
+    this.renderer.addClass(cardImg, 'card-img');
     this.renderer.addClass(cardBody, 'card-body');
+    this.renderer.addClass(cardInput, 'form-control');
+    this.renderer.addClass(cardInput, 'form-control-sm');
+    this.renderer.setAttribute(cardInput, 'placeholder', 'Enter screen name');
 
+    this.renderer.appendChild(card, cardMore);
+    this.renderer.appendChild(card, cardImg);
     this.renderer.appendChild(card, cardBody);
-    this.renderer.appendChild(cardBody, text);
+    this.renderer.appendChild(cardBody, cardInput);
     this.renderer.appendChild(this.workspace.nativeElement, card);
 
     this.draggableElementsInit();
@@ -47,11 +56,11 @@ export class ModelFlowComponent implements AfterViewInit {
       // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
       // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
       ConnectionOverlays: [
-          [ "Arrow", {
+          [ "PlainArrow", {
               location: 1,
               visible: true,
-              width: 11,
-              length: 11,
+              width: 10,
+              length: 7,
               id: "ARROW",
               events:{
                   click:function() { alert("you clicked on the arrow overlay")}
@@ -167,7 +176,7 @@ export class ModelFlowComponent implements AfterViewInit {
       dropOptions: { hoverClass: "hover", activeClass: "active" },
       isTarget: true,
       overlays: [
-          [ "Label", { location: [0.5, -0.5], label: "Drop", cssClass: "endpointTargetLabel", visible:false } ]
+          [ "Label", { location: [0.5, -0.5], label: "Drop", cssClass: "endpointTargetLabel", visible: false } ]
       ]
     };
 
