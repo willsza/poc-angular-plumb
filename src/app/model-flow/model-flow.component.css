@@ -1,4 +1,11 @@
 
+.canvas {
+	overflow: hidden;
+	background: #f5f9fd;
+	cursor: grab;
+	outline: none;
+}
+
 .btn {
 	border-radius: 50px;
 	background: #2c46e6;

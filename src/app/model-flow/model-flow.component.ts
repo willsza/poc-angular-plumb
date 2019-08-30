@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 
+import panzoom from 'panzoom';
 import { jsPlumb } from 'jsplumb';
 
 @Component({
@@ -9,9 +10,16 @@ import { jsPlumb } from 'jsplumb';
 })
 export class ModelFlowComponent implements AfterViewInit {
 
+  @ViewChild('panzoomContainer', { static: true })
+  private panzoomContainer: ElementRef;
+
   @ViewChild('workspace', { static: true })
   private workspace: ElementRef;
 
+  panZoomController: any;
+  currentZoomLevel: number;
+
+  canvaInstance: any;
   jsPlumbInstance: any;
   connections: any;
 
@@ -85,6 +93,57 @@ export class ModelFlowComponent implements AfterViewInit {
     this.addStartEndPoint();
     this.addFirstScreen();
     this.draggableElementsInit();
+    this.jpSetNewZoom();
+
+    // this.zoomLevels = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+    // this.currentZoomLevel = this.zoomLevels[4];
+    // panzoom(document.querySelector('#scene'));
+
+  }
+
+  // zoom(): void {
+  //   const isSmooth = false;
+  //   const scale = this.currentZoomLevel;
+
+
+  //   if (scale) {
+  //     const transform = this.panZoomController.getTransform();
+  //     const deltaX = transform.x;
+  //     const deltaY = transform.y;
+  //     const offsetX = scale + deltaX;
+  //     const offsetY = scale + deltaY;
+
+  //     if (isSmooth) {
+  //       this.panZoomController.smoothZoom(0, 0, scale);
+  //     } else {
+  //       this.panZoomController.zoomTo(offsetX, offsetY, scale);
+  //     }
+  //   }
+
+  // }
+
+  // zoomToggle(zoomIn: boolean): void {
+  //   const idx = this.zoomLevels.indexOf(this.currentZoomLevel);
+  //   if (zoomIn) {
+  //     if (typeof this.zoomLevels[idx + 1] !== 'undefined') {
+  //       this.currentZoomLevel = this.zoomLevels[idx + 1];
+  //     }
+  //   } else {
+  //     if (typeof this.zoomLevels[idx - 1] !== 'undefined') {
+  //       this.currentZoomLevel = this.zoomLevels[idx - 1];
+  //     }
+  //   }
+  //   if (this.currentZoomLevel === 1) {
+  //     this.panZoomController.moveTo(0, 0);
+  //     this.panZoomController.zoomAbs(0, 0, 1);
+  //   } else {
+  //     this.zoom();
+  //   }
+  // }
+
+  reset(): void {
+    this.panZoomController.moveTo(0 , 0);
+    this.panZoomController.zoomAbs(0, 0, 1);
   }
 
   // PUBLIC METHODS
@@ -127,6 +186,8 @@ export class ModelFlowComponent implements AfterViewInit {
   // PRIVATE METHODS
 
   private jsPlumbInit(): void {
+    this.panZoomController = panzoom(this.panzoomContainer.nativeElement);
+
     this.jsPlumbInstance = jsPlumb.getInstance({
 
       DragOptions: { cursor: 'pointer', zIndex: 2000 },
@@ -157,6 +218,8 @@ export class ModelFlowComponent implements AfterViewInit {
 
       Container: 'workspace'
     });
+
+    // this.jsPlumbInstance.setZoom(0.75);
   }
 
   private addStartEndPoint(): void {
@@ -205,12 +268,21 @@ export class ModelFlowComponent implements AfterViewInit {
   private draggableElementsInit(): void {
     const dragElements = document.getElementsByClassName('card');
     this.jsPlumbInstance.draggable(dragElements, {
-      containment: 'workspace',
+      // containment: 'workspace',
       drag(event) {
       },
       stop(event) {
         // console.log(event.pos);
       }
+    });
+  }
+
+
+
+  jpSetNewZoom(): void {
+    this.panZoomController.on('transform', (e) => {
+      const transform = e.getTransform();
+      this.jsPlumbInstance.setZoom(transform.scale);
     });
   }
 

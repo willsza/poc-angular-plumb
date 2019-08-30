@@ -1,9 +1,14 @@
 <div class="flow-nav">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="flow-nav-content col-md-12 px-5 py-4">
+			<div class="flow-nav-content col-md-6 px-5 py-4">
 				<button class="btn btn-primary btn-sm mr-3" (click)="addScreen()">+ New Element</button>
 				<button class="btn btn-primary btn-sm" (click)="getConnections()">Get Connections</button>
+			</div>
+			<div class="col-md-6 px-5 py-4 text-right">
+				<button class="btn btn-primary btn-sm mr-3" (click)="panZoomController.smoothZoom(20, 20, 0.8)">Zoom in</button>
+				<button class="btn btn-primary btn-sm mr-3" (click)="reset()">Fit</button>
+				<button class="btn btn-primary btn-sm" (click)="panZoomController.smoothZoom(20, 20, 1.25)">Zoom out</button>
 			</div>
 		</div>
 	</div>
@@ -11,46 +16,44 @@
 
 <hr />
 
-<div class="canvas">
-	<div class="container-fluid">
-		<div class="row">
-				<div class="workspace col-md-12 p-5" id="workspace" #workspace>
+<div class="canvas" id="canvas">
+	<div class="panzoom-container" id="panzoom-container" #panzoomContainer>
+		<div class="workspace p-5" id="workspace" #workspace>
 
-					<div class="card-start" id="start">START</div>
-		
-					<!-- <div class="card" id="table_1">
-						<div class="card-more"></div>
-						<div class="card-img"></div>
-						<div class="card-body">	
-							<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
-						</div>
-					</div> -->
-
-					<!-- <div class="card" id="table_2">
-						<div class="card-more"></div>
-						<div class="card-img"></div>
-						<div class="card-body">	
-							<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
-						</div>
-					</div>
-
-					<div class="card" id="table_3">
-						<div class="card-more"></div>
-						<div class="card-img"></div>
-						<div class="card-body">	
-							<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
-						</div>
-					</div>
-
-					<div class="card" id="table_4">
-						<div class="card-more"></div>
-						<div class="card-img"></div>
-						<div class="card-body">	
-							<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
-						</div>
-					</div> -->
-		
+			<div class="card-start" id="start">START</div>
+	
+			<!-- <div class="card" id="table_1">
+				<div class="card-more"></div>
+				<div class="card-img"></div>
+				<div class="card-body">	
+					<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
 				</div>
+			</div> -->
+	
+			<!-- <div class="card" id="table_2">
+				<div class="card-more"></div>
+				<div class="card-img"></div>
+				<div class="card-body">	
+					<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
+				</div>
+			</div>
+	
+			<div class="card" id="table_3">
+				<div class="card-more"></div>
+				<div class="card-img"></div>
+				<div class="card-body">	
+					<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
+				</div>
+			</div>
+	
+			<div class="card" id="table_4">
+				<div class="card-more"></div>
+				<div class="card-img"></div>
+				<div class="card-body">	
+					<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
+				</div>
+			</div> -->
+	
 		</div>
 	</div>
 </div>
