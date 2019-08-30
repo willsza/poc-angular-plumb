@@ -180,6 +180,10 @@ export class ModelFlowComponent implements AfterViewInit {
 
   // GET CONNECTIONS TO RENDER
   getConnections(): void {
+    // const connectionList = this.jsPlumbInstance.getConnections();
+    // connectionList.forEach(element => {
+    //   console.log(element);
+    // });
   }
 
 
@@ -220,6 +224,10 @@ export class ModelFlowComponent implements AfterViewInit {
     });
 
     // this.jsPlumbInstance.setZoom(0.75);
+
+    this.jsPlumbInstance.bind('beforeDrag', (params) => {
+      params.endpoint.getUuid(); // should return myIdentifier
+    });
   }
 
   private addStartEndPoint(): void {
