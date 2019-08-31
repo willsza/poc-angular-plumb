@@ -178,12 +178,41 @@ export class ModelFlowComponent implements AfterViewInit {
     this.addEndPoints(cardId);
   }
 
+
+  getNodes(): void {
+    const cards = [].slice.call(document.getElementsByClassName('card'));
+
+    const nodes = cards.map((card: HTMLElement) => {
+      return {
+        nodeId: card.id,
+        nodeTop: card.style.top,
+        nodeLeft: card.style.left
+      };
+    });
+
+    console.log(nodes);
+
+  }
+
   // GET CONNECTIONS TO RENDER
   getConnections(): void {
-    // const connectionList = this.jsPlumbInstance.getConnections();
-    // connectionList.forEach(element => {
-    //   console.log(element);
-    // });
+    const connections: any[] = [];
+
+    this.jsPlumbInstance.getConnections()
+      .forEach(connection => {
+        connections.push({
+          connectionId: connection.id,
+          sourceId: connection.sourceId,
+          targetId: connection.targetId,
+          sourceUuid: connection.endpoints[0].getUuid(),
+          targetUuid: connection.endpoints[1].getUuid()
+        });
+      });
+
+    // console.log(this.jsPlumbInstance.selectEndpoints({ source: 'start' }));
+    console.log(connections);
+
+    this.getNodes();
   }
 
 
@@ -232,7 +261,7 @@ export class ModelFlowComponent implements AfterViewInit {
 
   private addStartEndPoint(): void {
     this.jsPlumbInstance.addEndpoint('start', this.endpoint, {
-      anchor: 'Right', uuid: `start`
+      anchor: 'Right', uuid: `start_1`
     });
   }
 
@@ -250,7 +279,7 @@ export class ModelFlowComponent implements AfterViewInit {
   }
 
   private addFirstConection(): void {
-    this.jsPlumbInstance.connect({ uuids: [ 'start', '1_4' ] });
+    this.jsPlumbInstance.connect({ uuids: [ 'start_1', '1_4' ] });
   }
 
   private addEndPoints(elementId): void {
