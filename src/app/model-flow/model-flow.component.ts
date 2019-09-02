@@ -51,7 +51,8 @@ export class ModelFlowComponent implements AfterViewInit {
     strokeWidth: 3,
     stroke: '#216477',
     outlineWidth: 5,
-    outlineStroke: 'white'
+    outlineStroke: '#f5f9fd',
+    cursor: 'pointer'
   };
 
   endpointHoverStyle = {
@@ -71,8 +72,8 @@ export class ModelFlowComponent implements AfterViewInit {
     isTarget: true,
     connector: [ 'Flowchart', { stub: [10, 10], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
     connectorStyle: this.connectorPaintStyle,
-    hoverPaintStyle: this.endpointHoverStyle,
     connectorHoverStyle: this.connectorPaintHoverStyle,
+    hoverPaintStyle: this.endpointHoverStyle,
     dragOptions: { cursor: 'pointer', zIndex: 2000 },
     overlays: [
       [
@@ -92,7 +93,8 @@ export class ModelFlowComponent implements AfterViewInit {
       {
         id: '1',
         top: '180',
-        left: '300'
+        left: '300',
+        type: ''
       },
       {
         id: '2',
@@ -109,6 +111,23 @@ export class ModelFlowComponent implements AfterViewInit {
         top: '180',
         left: '900'
       }
+    ],
+    edges: [
+      {
+        id: 'con_1',
+        sourceId: '1',
+        targetId: '2'
+      },
+      {
+        id: 'con_2',
+        sourceId: '1',
+        targetId: '3'
+      },
+      {
+        id: 'con_3',
+        sourceId: '1',
+        targetId: '4'
+      },
     ]
   };
 
@@ -292,70 +311,60 @@ export class ModelFlowComponent implements AfterViewInit {
     });
 
     this.jsPlumbInstance.makeSource('1', {
-      anchor:"Continuous",
-
-      endpoint:["Rectangle", { width:40, height:20 }],
-      maxConnections:-1,
+      anchor: 'Continuous',
+      maxConnections: -1,
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
       }
-    });
+    }, this.endpoint);
+
     this.jsPlumbInstance.makeSource('2', {
-      anchor:"Continuous",
-
-  endpoint:["Rectangle", { width:40, height:20 }],
-  maxConnections:-1,
+      anchor: 'Continuous',
+      maxConnections: -1,
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
       }
-    });
+    }, this.endpoint);
+
     this.jsPlumbInstance.makeSource('3', {
-      anchor:"Continuous",
-
-  endpoint:["Rectangle", { width:40, height:20 }],
-  maxConnections:-1,
+      anchor: 'Continuous',
+      maxConnections: -1,
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
       }
-    });
+    }, this.endpoint);
+
     this.jsPlumbInstance.makeSource('4', {
-      anchor:"Continuous",
-
-  endpoint:["Rectangle", { width:40, height:20 }],
-  maxConnections:-1,
+      anchor: 'Continuous',
+      maxConnections: -1,
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
       }
-    });
+    }, this.endpoint);
+
     this.jsPlumbInstance.makeTarget('1', {
-      anchor:"Continuous",
+      anchor: 'Continuous',
+      maxConnections: -1,
+    }, this.endpoint);
 
-  endpoint:["Rectangle", { width:40, height:20 }],
-  maxConnections:-1,
-  filter:":not(input)"
-    });
     this.jsPlumbInstance.makeTarget('2', {
-      anchor:"Continuous",
+      anchor: 'Continuous',
+      maxConnections: -1
+    }, this.endpoint);
 
-  endpoint:["Rectangle", { width:40, height:20 }],
-  maxConnections:-1
-    });
     this.jsPlumbInstance.makeTarget('3', {
-      anchor:"Continuous",
+      anchor: 'Continuous',
+      maxConnections: -1
+    }, this.endpoint);
 
-  endpoint:["Rectangle", { width:40, height:20 }],
-  maxConnections:-1
-    });
     this.jsPlumbInstance.makeTarget('4', {
-      anchor:"Continuous",
-
-  endpoint:["Rectangle", { width:40, height:20 }],
-  maxConnections:-1
-    });
+      anchor: 'Continuous',
+      maxConnections: -1
+    }, this.endpoint);
 
   }
 
@@ -399,6 +408,8 @@ export class ModelFlowComponent implements AfterViewInit {
   private draggableElementsInit(): void {
     const dragElements = document.getElementsByClassName('card');
     this.jsPlumbInstance.draggable(dragElements, {
+      filter: '.card-move',
+      filterExclude: false,
       // containment: 'workspace',
       drag(event) {
       },

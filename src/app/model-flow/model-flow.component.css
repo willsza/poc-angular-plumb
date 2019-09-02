@@ -5,6 +5,9 @@
 	cursor: grab;
 	outline: none;
 }
+.canvas:active {
+	cursor: grabbing;
+}
 
 .btn {
 	border-radius: 50px;
@@ -47,8 +50,19 @@ hr {
 	position: absolute;
 	-webkit-box-shadow: 0px 0px 10px 0px rgba(225,228,230,1);
 	-moz-box-shadow: 0px 0px 10px 0px rgba(225,228,230,1);
-  box-shadow: 0px 0px 10px 0px rgba(225,228,230,1);
+	box-shadow: 0px 0px 10px 0px rgba(225,228,230,1);
+	cursor: pointer;
   /* background: blue; */
+}
+.card-move {
+	width: 18px;
+	height: 18px;
+	background: url('../../assets/move.svg') no-repeat;
+	background-size: cover;
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	cursor: move;
 }
 .card-more {
 	width: 16px;
@@ -63,11 +77,14 @@ hr {
 	height: 52px;
 	background: url('../../assets/bg-smartphone.svg') no-repeat;
   margin: 15px auto 0 auto;
-  border: 1px solid red;
 }
 
 .form-control-sm {
 	width: 110px !important;
 	font-size: 11px;
 	font-weight: 600;
+}
+
+.jtk-connector {
+	cursor: pointer !important;
 }
