@@ -86,12 +86,39 @@ export class ModelFlowComponent implements AfterViewInit {
     ]
   };
 
+
+  flowchart: any = {
+    nodes: [
+      {
+        id: '1',
+        top: '180',
+        left: '300'
+      },
+      {
+        id: '2',
+        top: '180',
+        left: '500'
+      },
+      {
+        id: '3',
+        top: '180',
+        left: '700'
+      },
+      {
+        id: '4',
+        top: '180',
+        left: '900'
+      }
+    ]
+  };
+
+
   constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit(): void {
     this.jsPlumbInit();
     this.addStartEndPoint();
-    this.addFirstScreen();
+    // this.addFirstScreen();
     this.draggableElementsInit();
     this.jpSetNewZoom();
 
@@ -263,6 +290,73 @@ export class ModelFlowComponent implements AfterViewInit {
     this.jsPlumbInstance.addEndpoint('start', this.endpoint, {
       anchor: 'Right', uuid: `start_1`
     });
+
+    this.jsPlumbInstance.makeSource('1', {
+      anchor:"Continuous",
+
+      endpoint:["Rectangle", { width:40, height:20 }],
+      maxConnections:-1,
+      filter: (event, element) => {
+        return event.target.classList.contains('card')
+        || event.target.classList.contains('card-body');
+      }
+    });
+    this.jsPlumbInstance.makeSource('2', {
+      anchor:"Continuous",
+
+  endpoint:["Rectangle", { width:40, height:20 }],
+  maxConnections:-1,
+      filter: (event, element) => {
+        return event.target.classList.contains('card')
+        || event.target.classList.contains('card-body');
+      }
+    });
+    this.jsPlumbInstance.makeSource('3', {
+      anchor:"Continuous",
+
+  endpoint:["Rectangle", { width:40, height:20 }],
+  maxConnections:-1,
+      filter: (event, element) => {
+        return event.target.classList.contains('card')
+        || event.target.classList.contains('card-body');
+      }
+    });
+    this.jsPlumbInstance.makeSource('4', {
+      anchor:"Continuous",
+
+  endpoint:["Rectangle", { width:40, height:20 }],
+  maxConnections:-1,
+      filter: (event, element) => {
+        return event.target.classList.contains('card')
+        || event.target.classList.contains('card-body');
+      }
+    });
+    this.jsPlumbInstance.makeTarget('1', {
+      anchor:"Continuous",
+
+  endpoint:["Rectangle", { width:40, height:20 }],
+  maxConnections:-1,
+  filter:":not(input)"
+    });
+    this.jsPlumbInstance.makeTarget('2', {
+      anchor:"Continuous",
+
+  endpoint:["Rectangle", { width:40, height:20 }],
+  maxConnections:-1
+    });
+    this.jsPlumbInstance.makeTarget('3', {
+      anchor:"Continuous",
+
+  endpoint:["Rectangle", { width:40, height:20 }],
+  maxConnections:-1
+    });
+    this.jsPlumbInstance.makeTarget('4', {
+      anchor:"Continuous",
+
+  endpoint:["Rectangle", { width:40, height:20 }],
+  maxConnections:-1
+    });
+
   }
 
   private addFirstScreen(): void {

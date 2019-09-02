@@ -21,39 +21,21 @@
 		<div class="workspace p-5" id="workspace" #workspace>
 
 			<div class="card-start" id="start">START</div>
-	
-			<!-- <div class="card" id="table_1">
-				<div class="card-more"></div>
+
+      <div
+        class="card"
+        *ngFor="let node of flowchart.nodes"
+        id="{{ node.id }}"
+        style.top="{{ node.top }}px"
+        style.left="{{ node.left }}px"
+      >
+        <div class="card-more"></div>
 				<div class="card-img"></div>
-				<div class="card-body">	
-					<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
-				</div>
-			</div> -->
-	
-			<!-- <div class="card" id="table_2">
-				<div class="card-more"></div>
-				<div class="card-img"></div>
-				<div class="card-body">	
-					<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
-				</div>
-			</div>
-	
-			<div class="card" id="table_3">
-				<div class="card-more"></div>
-				<div class="card-img"></div>
-				<div class="card-body">	
+				<div class="card-body">
 					<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
 				</div>
 			</div>
-	
-			<div class="card" id="table_4">
-				<div class="card-more"></div>
-				<div class="card-img"></div>
-				<div class="card-body">	
-					<input class="form-control form-control-sm" type="text" placeholder="Enter screen name">
-				</div>
-			</div> -->
-	
+
 		</div>
 	</div>
 </div>
