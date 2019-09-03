@@ -10,8 +10,8 @@ import { jsPlumb } from 'jsplumb';
 })
 export class ModelFlowComponent implements AfterViewInit {
 
-  @ViewChild('panzoomContainer', { static: true })
-  private panzoomContainer: ElementRef;
+  @ViewChild('panzoom', { static: true })
+  private panzoom: ElementRef;
 
   @ViewChild('workspace', { static: true })
   private workspace: ElementRef;
@@ -68,23 +68,19 @@ export class ModelFlowComponent implements AfterViewInit {
         radius: 5,
         strokeWidth: 1
     },
-    isSource: true,
-    isTarget: true,
+    // isSource: true,
+    // isTarget: true,
     connector: [ 'Flowchart', { stub: [10, 10], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
     connectorStyle: this.connectorPaintStyle,
     connectorHoverStyle: this.connectorPaintHoverStyle,
     hoverPaintStyle: this.endpointHoverStyle,
-    dragOptions: { cursor: 'pointer', zIndex: 2000 },
-    overlays: [
-      [
-        'Label', {
-          location: [0.5, 1.5],
-          label: 'Drag',
-          cssClass: 'endpointSourceLabel',
-          visible: false
-        }
-      ]
-    ]
+    dragOptions: {
+      cursor: 'pointer',
+      zIndex: 2000
+    },
+    // overlays: [
+    //   ['Label', {label: 'labelName', location: 0.5, cssClass: 'connectingConnectorLabel'}]
+    // ],
   };
 
 
@@ -265,7 +261,7 @@ export class ModelFlowComponent implements AfterViewInit {
   // PRIVATE METHODS
 
   private jsPlumbInit(): void {
-    this.panZoomController = panzoom(this.panzoomContainer.nativeElement);
+    this.panZoomController = panzoom(this.panzoom.nativeElement);
 
     this.jsPlumbInstance = jsPlumb.getInstance({
 
@@ -283,16 +279,16 @@ export class ModelFlowComponent implements AfterViewInit {
             }
           }
         ],
-        [
-          'Label', {
-            location: 0.1,
-            id: 'label',
-            cssClass: 'aLabel',
-            events: {
-              tap() { alert('hey'); }
-            }
-          }
-        ]
+        // [
+        //   'Label', {
+        //     location: 0.1,
+        //     id: 'label',
+        //     cssClass: 'aLabel',
+        //     events: {
+        //       tap() { alert('hey'); }
+        //     }
+        //   }
+        // ]
       ],
 
       Container: 'workspace'
@@ -300,8 +296,10 @@ export class ModelFlowComponent implements AfterViewInit {
 
     // this.jsPlumbInstance.setZoom(0.75);
 
-    this.jsPlumbInstance.bind('beforeDrag', (params) => {
-      params.endpoint.getUuid(); // should return myIdentifier
+
+    // BLOCK CONNECTION ON YOURSELF
+    this.jsPlumbInstance.bind('beforeDrop', (params) => {
+      return params.sourceId === params.targetId ? false : true;
     });
   }
 
@@ -313,6 +311,11 @@ export class ModelFlowComponent implements AfterViewInit {
     this.jsPlumbInstance.makeSource('1', {
       anchor: 'Continuous',
       maxConnections: -1,
+      dragOptions: {
+        stop: (e, ui) => {
+          // Stop drag event
+        }
+      },
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
@@ -325,7 +328,10 @@ export class ModelFlowComponent implements AfterViewInit {
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
-      }
+      },
+      overlays: [
+        ['Label', {label: 'labelName', location: 0.5, cssClass: 'connectingConnectorLabel'}]
+      ],
     }, this.endpoint);
 
     this.jsPlumbInstance.makeSource('3', {
@@ -408,6 +414,7 @@ export class ModelFlowComponent implements AfterViewInit {
   private draggableElementsInit(): void {
     const dragElements = document.getElementsByClassName('card');
     this.jsPlumbInstance.draggable(dragElements, {
+      // grid: [100, 100],
       filter: '.card-move',
       filterExclude: false,
       // containment: 'workspace',
