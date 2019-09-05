@@ -88,14 +88,13 @@ export class ModelFlowComponent implements AfterViewInit {
     nodes: [
       {
         id: '1',
-        top: '180',
-        left: '300',
-        type: ''
+        top: '280',
+        left: '200'
       },
       {
         id: '2',
-        top: '180',
-        left: '500'
+        top: '20',
+        left: '260'
       },
       {
         id: '3',
@@ -104,25 +103,25 @@ export class ModelFlowComponent implements AfterViewInit {
       },
       {
         id: '4',
-        top: '180',
+        top: '303',
         left: '900'
       }
     ],
     edges: [
       {
         id: 'con_1',
-        sourceId: '1',
-        targetId: '2'
+        source: '1',
+        target: '2'
       },
       {
         id: 'con_2',
-        sourceId: '1',
-        targetId: '3'
+        source: '1',
+        target: '3'
       },
       {
         id: 'con_3',
-        sourceId: '1',
-        targetId: '4'
+        source: '1',
+        target: '4'
       },
     ]
   };
@@ -263,9 +262,11 @@ export class ModelFlowComponent implements AfterViewInit {
   private jsPlumbInit(): void {
     this.panZoomController = panzoom(this.panzoom.nativeElement);
 
-    this.jsPlumbInstance = jsPlumb.getInstance({
+    this.jsPlumbInstance = jsPlumb.getInstance();
 
-      DragOptions: { cursor: 'pointer', zIndex: 2000 },
+    this.jsPlumbInstance.importDefaults({
+      Anchor: 'Continuous',
+      Connector: [ 'Flowchart', { stub: [10, 10], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
       ConnectionOverlays: [
         [
           'PlainArrow', {
@@ -278,7 +279,63 @@ export class ModelFlowComponent implements AfterViewInit {
               click() { alert('you clicked on the arrow overlay'); }
             }
           }
-        ],
+        ]
+      ],
+      Container: 'workspace',
+      DragOptions: { cursor: 'crosshair' },
+      Endpoint: [ 'Dot', { radius: 5 } ],
+      Endpoints: [ [ 'Dot', { radius: 5 } ], [ 'Dot', { radius: 5 } ] ],
+      EndpointStyle: { fill: '#7AB02C', strokeWidth: 1 },
+      EndpointStyles: [
+        { fill: '#7AB02C', strokeWidth: 1 },
+        { fill: '#7AB02C', strokeWidth: 1 }
+      ],
+      HoverPaintStyle: {
+        strokeWidth: 3,
+        stroke: '#216477',
+        outlineWidth: 5,
+        outlineStroke: '#f5f9fd',
+        cursor: 'pointer'
+      },
+      MaxConnections: -1,
+      PaintStyle: {
+        strokeWidth: 1,
+        stroke: '#60789b',
+        joinstyle: 'round',
+        outlineStroke: '#f5f9fd',
+        outlineWidth: 2
+      }
+    });
+
+
+    // this.jsPlumbInstance = jsPlumb.getInstance({
+      // Endpoint: 'Dot',
+      // PaintStyle: {
+      //     stroke: 'transparent',
+      //     fill: '#7AB02C',
+      //     strokeWidth: 1
+      // },
+      // // isSource: true,
+      // // isTarget: true,
+      // Connector: [ 'Flowchart', { stub: [10, 10], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
+      // ConnectorStyle: this.connectorPaintStyle,
+      // ConnectorHoverStyle: this.connectorPaintHoverStyle,
+      // HoverPaintStyle: this.endpointHoverStyle,
+
+      // DragOptions: { cursor: 'pointer', zIndex: 2000 },
+      // ConnectionOverlays: [
+      //   [
+      //     'PlainArrow', {
+      //       location: 1,
+      //       visible: true,
+      //       width: 10,
+      //       length: 7,
+      //       id: 'ARROW',
+      //       events: {
+      //         click() { alert('you clicked on the arrow overlay'); }
+      //       }
+      //     }
+      //   ],
         // [
         //   'Label', {
         //     location: 0.1,
@@ -289,10 +346,12 @@ export class ModelFlowComponent implements AfterViewInit {
         //     }
         //   }
         // ]
-      ],
+      // ],
 
-      Container: 'workspace'
-    });
+      // Container: 'workspace'
+    // });
+
+
 
     // this.jsPlumbInstance.setZoom(0.75);
 
@@ -301,6 +360,20 @@ export class ModelFlowComponent implements AfterViewInit {
     this.jsPlumbInstance.bind('beforeDrop', (params) => {
       return params.sourceId === params.targetId ? false : true;
     });
+
+    // DELETE CONNECTION CLICK LINE
+    this.jsPlumbInstance.bind('click', (conn, originalEvent) => {
+      if (confirm('Delete connection from ' + conn.sourceId + ' to ' + conn.targetId + '?')) {
+        this.jsPlumbInstance.deleteConnection(conn);
+      }
+    });
+
+
+
+    this.flowchart.edges.forEach(connection => {
+      this.jsPlumbInstance.connect(connection);
+    });
+
   }
 
   private addStartEndPoint(): void {
@@ -309,68 +382,68 @@ export class ModelFlowComponent implements AfterViewInit {
     });
 
     this.jsPlumbInstance.makeSource('1', {
-      anchor: 'Continuous',
-      maxConnections: -1,
-      dragOptions: {
-        stop: (e, ui) => {
-          // Stop drag event
-        }
-      },
+      // anchor: 'Continuous',
+      // maxConnections: -1,
+      // dragOptions: {
+      //   stop: (e, ui) => {
+      //     // Stop drag event
+      //   }
+      // },
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
       }
-    }, this.endpoint);
+    });
 
     this.jsPlumbInstance.makeSource('2', {
-      anchor: 'Continuous',
-      maxConnections: -1,
+      // anchor: 'Continuous',
+      // maxConnections: -1,
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
       },
-      overlays: [
-        ['Label', {label: 'labelName', location: 0.5, cssClass: 'connectingConnectorLabel'}]
-      ],
-    }, this.endpoint);
+      // overlays: [
+      //   ['Label', {label: 'labelName', location: 0.5, cssClass: 'connectingConnectorLabel'}]
+      // ],
+    });
 
     this.jsPlumbInstance.makeSource('3', {
-      anchor: 'Continuous',
-      maxConnections: -1,
+      // anchor: 'Continuous',
+      // maxConnections: -1,
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
       }
-    }, this.endpoint);
+    });
 
     this.jsPlumbInstance.makeSource('4', {
-      anchor: 'Continuous',
-      maxConnections: -1,
+      // anchor: 'Continuous',
+      // maxConnections: -1,
       filter: (event, element) => {
         return event.target.classList.contains('card')
         || event.target.classList.contains('card-body');
       }
-    }, this.endpoint);
+    });
 
     this.jsPlumbInstance.makeTarget('1', {
-      anchor: 'Continuous',
-      maxConnections: -1,
-    }, this.endpoint);
+      // anchor: 'Continuous',
+      // maxConnections: -1,
+    });
 
     this.jsPlumbInstance.makeTarget('2', {
-      anchor: 'Continuous',
-      maxConnections: -1
-    }, this.endpoint);
+      // anchor: 'Continuous',
+      // maxConnections: -1
+    });
 
     this.jsPlumbInstance.makeTarget('3', {
-      anchor: 'Continuous',
-      maxConnections: -1
-    }, this.endpoint);
+      // anchor: 'Continuous',
+      // maxConnections: -1
+    });
 
     this.jsPlumbInstance.makeTarget('4', {
-      anchor: 'Continuous',
-      maxConnections: -1
-    }, this.endpoint);
+      // anchor: 'Continuous',
+      // maxConnections: -1
+    });
 
   }
 

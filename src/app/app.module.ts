@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ModelFlowComponent } from './model-flow/model-flow.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { EdgeDirective } from './model-flow/edge.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ModelFlowComponent
+    ModelFlowComponent,
+    EdgeDirective
   ],
   imports: [
     BrowserModule,
